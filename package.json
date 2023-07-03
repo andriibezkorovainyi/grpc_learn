@@ -1,0 +1,22 @@
+{
+  "name": "grpc_learn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "pb:gen": "./scripts/gen.sh greet",
+    "greet:server": "node ./greet/server/index.js",
+    "greet:client": "node ./greet/client/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.8.17",
+    "google-protobuf": "^3.21.2"
+  },
+  "devDependencies": {
+    "grpc-tools": "^1.12.4"
+  }
+}
