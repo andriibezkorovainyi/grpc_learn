@@ -29,3 +29,24 @@ exports.primeNumberDecomposition = (call, _) => {
 
     call.end();
 };
+
+exports.average = (call, callback) => {
+    console.log('Average was invoked');
+    const numbers = [];
+
+    call.on('data', (req) => {
+        numbers.push(req.getNumber())
+    })
+
+    console.log('Finished streaming');
+
+    call.on('end', () => {
+        const average = numbers.reduce((a, b) => a + b) / numbers.length;
+        const res = new pb.AverageResponse()
+            .setAverage(average);
+
+        console.log('response: ', res)
+        callback(null, res)
+        console.log('DONE')
+    })
+}
