@@ -20,3 +20,38 @@ exports.greetManyTimes = (call, _) => {
 
     call.end();
 };
+
+exports.greetEveryone = (call) => {
+    console.log('GreetEveryone was invoked');
+
+    call.on('data', (req) => {
+        const res = new pb.GreetResponse()
+            .setGreeting(`Hello, ${req.getName()}`);
+
+        call.write(res);
+    });
+
+    call.on('end', () => {
+        console.log('Client has ended the request');
+        call.end();
+    });
+}
+
+exports.greetWithDeadline = async (call, callback) => {
+    console.log('GreetWithDeadline was invoked');
+    const sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    for await (let i of [1, 2, 3]) {
+        if (call.cancelled) {
+            console.log('The client has cancelled the request');
+            return;
+        }
+
+        await sleep(1000);
+    }
+
+    const res = new pb.GreetResponse()
+        .setGreeting(`Hello, ${call.request.getName()}`);
+
+    callback(null, res);
+};

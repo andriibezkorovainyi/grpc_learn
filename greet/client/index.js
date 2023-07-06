@@ -29,13 +29,62 @@ function doGreetManyTimes(client) {
     });
 }
 
+function doGreetEveryone(client) {
+    console.log('doGreetEveryone is invoked');
+    const names = ['John', 'Jane', 'Doe'];
+    const call = client.greetEveryone();
+
+    call.on('data', (res) => {
+        console.log(`GreetEveryone: ${res.getGreeting()}`);
+    });
+
+    call.on('end', () => {
+        console.log('Server has ended the request');
+    });
+
+    call.on('error', (err) => {
+        console.error(err);
+    });
+
+    call.on('status', (status) => {
+        console.log(status);
+    });
+
+    names.map((name) => {
+        const req = new GreetRequest().setName(name);
+
+        return req;
+    }).forEach((req) => {
+        call.write(req);
+    });
+
+    call.end();
+}
+
+function doGreetWithDeadline(client, n) {
+    const request = new GreetRequest().setName('John');
+    const deadline = new Date(Date.now() + n);
+
+    client.greetWithDeadline(request, { deadline }, (err, res) => {
+        if (err) {
+            console.error(err);
+
+            return;
+        }
+
+        console.log(`GreetWithDeadline: ${res.getGreeting()}`);
+    });
+}
+
 function main() {
     const creds = grpc.ChannelCredentials.createInsecure();
     const client = new GreetServiceClient('localhost:50052', creds);
 
 
-    doGreet(client);
-    doGreetManyTimes(client);
+    // doGreet(client);
+    // doGreetManyTimes(client);
+    // doGreetEveryone(client);
+    doGreetWithDeadline(client, 5000);
     client.close();
 }
 

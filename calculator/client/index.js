@@ -1,6 +1,6 @@
 const grpc = require('@grpc/grpc-js');
 const { CalculatorServiceClient } = require('../proto/calculator_grpc_pb');
-const { SumRequest, PrimeNumberDecompositionRequest, AverageRequest } = require('../proto/calculator_pb');
+const { SumRequest, PrimeNumberDecompositionRequest, AverageRequest, FindMaximumRequest } = require('../proto/calculator_pb');
 
 function doSum(client) {
     const req = new SumRequest().setA(10).setB(3)
@@ -46,13 +46,34 @@ function doAverage(client) {
     call.end();
 }
 
+function doFindMaximum(client) {
+    console.log('doFindMaximum invoked');
+    const numbers = [1, 5, 3, 6, 2, 20];
+
+    const call = client.findMaximum();
+
+    call.on('data', (res) => {
+        console.log(`Maximum number is - ${res.getMaximum()}`)
+    })
+
+    call.on('error', (err) => {
+        console.log(err)
+    })
+
+    numbers
+        .map(num => new FindMaximumRequest().setNumber(num))
+        .forEach(req => call.write(req));
+    call.end();
+}
+
 function main() {
     const creds = grpc.ChannelCredentials.createInsecure();
     const client = new CalculatorServiceClient('localhost:50053', creds);
 
     // doSum(client);
     // doPrimeNumberDecomposition(client);
-    doAverage(client);
+    // doAverage(client);
+    doFindMaximum(client);
     client.close();
 }
 

@@ -50,3 +50,20 @@ exports.average = (call, callback) => {
         console.log('DONE')
     })
 }
+
+exports.findMaximum = (call) => {
+    const numbers = [];
+
+    call.on('data', (req) => {
+        const incomeNumber = req.getNumber();
+        numbers.push(incomeNumber);
+
+        if (incomeNumber === Math.max(...numbers)) {
+            call.write(new pb.FindMaximumResponse().setMaximum(incomeNumber));
+        }
+    });
+
+    call.on('end', () => {
+        call.end();
+    });
+}
