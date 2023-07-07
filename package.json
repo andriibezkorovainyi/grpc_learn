@@ -5,18 +5,23 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "pb:gen": "./scripts/gen.sh greet",
+    "ssl:gen": "cd ssl && ../scripts/ssl.sh && cd ..",
+    "pb:gen": "./scripts/gen.sh greet calculator blog",
     "greet:server": "node ./greet/server/index.js",
     "greet:client": "node ./greet/client/index.js",
     "calculator:server": "node ./calculator/server/index.js",
-    "calculator:client": "node ./calculator/client/index.js"
+    "calculator:client": "node ./calculator/client/index.js",
+    "blog:server": "node ./blog/server/index.js",
+    "blog:client": "node ./blog/client/index.js",
+    "blog:db": "cd blog; docker-compose up; cd .."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@grpc/grpc-js": "^1.8.17",
-    "google-protobuf": "^3.21.2"
+    "google-protobuf": "^3.21.2",
+    "mongodb": "^5.7.0"
   },
   "devDependencies": {
     "grpc-tools": "^1.12.4"

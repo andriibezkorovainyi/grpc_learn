@@ -1,6 +1,7 @@
 const grpc = require('@grpc/grpc-js');
 const { GreetServiceClient } = require('../proto/greet_grpc_pb');
 const { GreetRequest } = require('../proto/greet_pb');
+const fs = require('fs/promises');
 
 function doGreet(client) {
     console.log('doGreet is invoked');
@@ -76,15 +77,19 @@ function doGreetWithDeadline(client, n) {
     });
 }
 
-function main() {
-    const creds = grpc.ChannelCredentials.createInsecure();
+async function main() {
+    const TLS = true;
+    const creds = TLS
+        ? grpc.credentials.createSsl(await fs.readFile('./ssl/ca.crt'))
+        : grpc.credentials.createInsecure();
+
     const client = new GreetServiceClient('localhost:50052', creds);
 
 
-    // doGreet(client);
+    doGreet(client);
     // doGreetManyTimes(client);
     // doGreetEveryone(client);
-    doGreetWithDeadline(client, 5000);
+    // doGreetWithDeadline(client, 5000);
     client.close();
 }
 
