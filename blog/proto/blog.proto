@@ -4,13 +4,14 @@ package blog;
 import "google/protobuf/empty.proto";
 
 message Blog {
-    string id = 1;
-    string author_id = 2;
-    string title = 3;
-    string content = 4;
+  string id = 1;
+  string author_id = 2;
+  string title = 3;
+  string content = 4;
 }
+
 message BlogId {
-    string id = 1;
+  string id = 1;
 }
 
 service BlogService {

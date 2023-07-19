@@ -70,9 +70,9 @@ function main() {
     const creds = grpc.ChannelCredentials.createInsecure();
     const client = new CalculatorServiceClient('localhost:50053', creds);
 
-    // doSum(client);
-    // doPrimeNumberDecomposition(client);
-    // doAverage(client);
+    // doSum(client.js);
+    // doPrimeNumberDecomposition(client.js);
+    // doAverage(client.js);
     doFindMaximum(client);
     client.close();
 }

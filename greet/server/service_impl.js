@@ -43,7 +43,7 @@ exports.greetWithDeadline = async (call, callback) => {
 
     for await (let i of [1, 2, 3]) {
         if (call.cancelled) {
-            console.log('The client has cancelled the request');
+            console.log('The client.js has cancelled the request');
             return;
         }
 

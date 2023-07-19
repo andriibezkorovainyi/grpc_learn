@@ -87,9 +87,9 @@ async function main() {
 
 
     doGreet(client);
-    // doGreetManyTimes(client);
-    // doGreetEveryone(client);
-    // doGreetWithDeadline(client, 5000);
+    // doGreetManyTimes(client.js);
+    // doGreetEveryone(client.js);
+    // doGreetWithDeadline(client.js, 5000);
     client.close();
 }
 

@@ -4,17 +4,16 @@ const { BlogServiceService } = require('../proto/blog_grpc_pb');
 const fs = require('fs/promises');
 const { MongoClient } = require('mongodb');
 
-const addr = 'localhost:50052';
+const addr = 'localhost:50051';
 const dbUrl = 'mongodb://root:root@localhost:27017';
 const mongoClient = new MongoClient(dbUrl, { useUnifiedTopology: true });
 
+global.collection = undefined;
+
 async function cleanUp(server) {
     console.log('Cleaning up...');
-
-    if (!server) {
         await mongoClient.close()
         server.forceShutdown();
-    }
 }
 
 async function main() {
@@ -43,7 +42,7 @@ async function main() {
 
     await mongoClient.connect();
     const db = mongoClient.db('blog');
-    const collection = db.collection('blog');
+    global.collection = db.collection('blog');
 
     server.addService(BlogServiceService, serviceImpl);
     server.bindAsync(addr, creds, (err, _) => {
@@ -58,4 +57,7 @@ async function main() {
     console.log(`Server running at ${addr}`);
 }
 
-main().catch(cleanUp);
+main().catch(err => {
+    console.error(err);
+    cleanUp()
+});
